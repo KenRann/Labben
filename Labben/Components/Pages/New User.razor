@@ -3,10 +3,101 @@
 
 <h3>Welcome, new user!</h3>
 
-<EditForm Model="">
+@if (showing)
+{
+    <EditForm Model="userData" OnValidSubmit="ValidSubmitHandling">
+        <DataAnnotationsValidator />
+        First name:
+        <div>
 
-</EditForm>
+            <InputText id="FirstName" @bind-Value="userData.FirstName"></InputText>
+            <ValidationMessage For="@(() => userData.FirstName)" /> 
+        </div>
+        Last name:
+        <div>
+            <InputText id="LastName" @bind-Value="userData.LastName"></InputText>
+            <ValidationMessage For="@(() => userData.LastName)" />
+        </div>
+        E-Mail adress:
+        <div>       
+            <InputText id="EMail" @bind-Value="userData.EMail" ></InputText>
+            <ValidationMessage For="@(() => userData.EMail)" />
+        </div>
+        Date of Birth:
+        <div>                
+            <InputDate style="" id="DateOfBirth" @bind-Value="userData.DateOfBirth"></InputDate>
+            <ValidationMessage For="@(() => userData.DateOfBirth)" />
+        </div>
 
+        <div> 
+            Gender:
+            <select @bind="userData.Gender">
+                <option value=""> -- Select Gender --</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </select>
+
+        </div>
+        <button type="submit">Submit</button>
+    </EditForm>
+    <button @onclick="quickTest">Quick add info</button>
+}
+else
+{
+    if (newUser.Count > 0)
+    {
+        var latestPerson = newUser.Last();
+        <h4>This you?:</h4>
+        <p>First Name: @latestPerson.FirstName</p>
+        <p>Last Name: @latestPerson.LastName</p>
+        <p>E-mail: @latestPerson.EMail</p>
+        <p>Date of Birth: @latestPerson.DateOfBirth</p>
+        <p>Gender: @latestPerson.Gender</p>
+
+        <button @onclick="@NewUser">New user</button>
+    }
+}
 @code {
+    private User userData = new User();
+    private List<User> newUser = new List<User>();
+    bool showing = true;
 
+
+    private void ValidSubmitHandling()
+    {
+        AddUser(userData.FirstName, userData.LastName, userData.EMail, userData.DateOfBirth, userData.Gender);
+        showing = false;
+
+        foreach (User p in newUser)
+        {
+            Console.WriteLine(p.FirstName + p.LastName + p.EMail +p.DateOfBirth.ToString("dd-MM-yyyy") + p.Gender);
+        }
+    }
+    private void NewUser()
+    {
+        showing = true;
+        userData = new User();
+    }
+
+    private void AddUser(string fName, string lName, string eMail, DateOnly dateOfBirth, string gender) //skapar en metod för att lägga till användare. Den tar emot 5 argument som den sen konverterar till en ny
+    {                                                                                                   // användare och som vi sedan lägger till i vår lista av användare 'newUser'
+        User user = new User(fName, lName, eMail, dateOfBirth, gender);
+        newUser.Add(user);      
+    }
+
+    protected override void OnInitialized()
+    {
+        userData.DateOfBirth = DateOnly.FromDateTime(DateTime.Now);                                     // Sätter startpunk på date of birth
+    }
+
+    //snabbinputtest
+    private void quickTest()
+    {
+        userData.FirstName = "john";
+        userData.LastName = "blund";
+        userData.EMail = "johnblund@email.se";
+        userData.DateOfBirth = new DateOnly(1990, 04, 24);
+        userData.Gender = "Male";
+    }
 }
