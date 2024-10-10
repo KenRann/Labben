@@ -14,6 +14,8 @@ namespace Labben
         [Required]
         [StringLength(50, MinimumLength = 2)]
         public string FirstName { get { return _firstName; } set { _firstName = value; } }
+        [Required]
+        [StringLength (50, MinimumLength = 2)]
         public string LastName { get { return _lastName; } set { _lastName = value; } }
 
         [Required]
@@ -21,7 +23,7 @@ namespace Labben
         public string EMail { get { return _eMail; } set { _eMail = value; } }
 
         [Required]
-        
+        [DataType(DataType.Date)]
         public DateOnly DateOfBirth { get { return (DateOnly)_dateOfBirth;  } set{ _dateOfBirth = value; } }
 
         [Required(ErrorMessage = "Select a gender option.")]

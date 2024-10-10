@@ -7,41 +7,53 @@
 {
     <EditForm Model="userData" OnValidSubmit="ValidSubmitHandling">
         <DataAnnotationsValidator />
+       
         First name:
         <div>
 
             <InputText id="FirstName" @bind-Value="userData.FirstName"></InputText>
             <ValidationMessage For="@(() => userData.FirstName)" /> 
         </div>
+
         Last name:
         <div>
             <InputText id="LastName" @bind-Value="userData.LastName"></InputText>
             <ValidationMessage For="@(() => userData.LastName)" />
         </div>
+
         E-Mail adress:
         <div>       
             <InputText id="EMail" @bind-Value="userData.EMail" ></InputText>
             <ValidationMessage For="@(() => userData.EMail)" />
         </div>
+
         Date of Birth:
         <div>                
             <InputDate style="" id="DateOfBirth" @bind-Value="userData.DateOfBirth"></InputDate>
             <ValidationMessage For="@(() => userData.DateOfBirth)" />
         </div>
 
-        <div> 
-            Gender:
+        Gender:
+        <div>             
             <select @bind="userData.Gender">
-                <option value=""> -- Select Gender --</option>
+                <option value=> -- Select Gender --</option>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
                 <option value="Other">Other</option>
             </select>
-
+            <ValidationMessage For="@(() => userData.Gender)" />
         </div>
+
+
+        <div style="margin-bottom: 10px; margin-top: 20px;" >
         <button type="submit">Submit</button>
+        </div>
     </EditForm>
-    <button @onclick="quickTest">Quick add info</button>
+
+
+    <div >
+    <button @onclick="quickTest">Quick add user</button>
+    </div>
 }
 else
 {
@@ -58,6 +70,8 @@ else
         <button @onclick="@NewUser">New user</button>
     }
 }
+
+
 @code {
     private User userData = new User();
     private List<User> newUser = new List<User>();
@@ -66,12 +80,13 @@ else
 
     private void ValidSubmitHandling()
     {
-        AddUser(userData.FirstName, userData.LastName, userData.EMail, userData.DateOfBirth, userData.Gender);
+        newUser.Add(new User(userData.FirstName, userData.LastName, userData.EMail, userData.DateOfBirth, userData.Gender));
+        // AddUser(userData.FirstName, userData.LastName, userData.EMail, userData.DateOfBirth, userData.Gender);
         showing = false;
 
-        foreach (User p in newUser)
+        foreach (User p in newUser) // just to double check console that the imputs are correct if blazor app is being funky
         {
-            Console.WriteLine(p.FirstName + p.LastName + p.EMail +p.DateOfBirth.ToString("dd-MM-yyyy") + p.Gender);
+            Console.WriteLine(p.FirstName + p.LastName + p.EMail +p.DateOfBirth.ToString("yyyy-MM-dd") + p.Gender);
         }
     }
     private void NewUser()
@@ -80,11 +95,11 @@ else
         userData = new User();
     }
 
-    private void AddUser(string fName, string lName, string eMail, DateOnly dateOfBirth, string gender) //skapar en metod för att lägga till användare. Den tar emot 5 argument som den sen konverterar till en ny
-    {                                                                                                   // användare och som vi sedan lägger till i vår lista av användare 'newUser'
-        User user = new User(fName, lName, eMail, dateOfBirth, gender);
-        newUser.Add(user);      
-    }
+    // private void AddUser(string fName, string lName, string eMail, DateOnly dateOfBirth, string gender) //skapar en metod för att lägga till användare. Den tar emot 5 argument som den sen konverterar till en ny
+    // {                                                                                                   // användare och som vi sedan lägger till i vår lista av användare 'newUser'
+    //     var user = new User(fName, lName, eMail, dateOfBirth, gender);
+    //     newUser.Add(user);      
+    // }
 
     protected override void OnInitialized()
     {
