@@ -3,6 +3,31 @@
 
 <h3>Users</h3>
 
+@*<Users Name="Alice"/>@**@
+
+<p>are you </p>
+
+
+<button @onclick="LoadingList">loadlist</button>
+<p>@searchResult</p>
+
 @code {
+    GeneratedInfo genUserData = new GeneratedInfo();
+
+    string searchResult = "";
+    async Task LoadingList()
+    {
+        searchResult = "Loading...";
+        await Task.Delay(2000);
+        searchResult = "found";
+    }
+
+    private void PlaceHolder()
+    {
+
+
+    }
+
+    
 
 }
