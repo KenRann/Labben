@@ -1,18 +1,37 @@
 ﻿@page "/Users"
 @rendermode InteractiveServer
+@attribute [StreamRendering] 
 
 <h3>Users</h3>
 
-@*<Users Name="Alice"/>@**@
-
-<p>are you </p>
 
 
+@if (genPerson.ReturnList == null)
+{
+    <p><em>Loading...</em></p>    
+}
+
+else
+{
 <button @onclick="LoadingList">loadlist</button>
 <p>@searchResult</p>
 
+@foreach (Person user in genPerson.ReturnList())
+{
+    <p>@user.Company.CompanyName</p>
+
+}
+}
+
 @code {
-    GeneratedInfo genUserData = new GeneratedInfo();
+    GeneratedPerson genPerson = new GeneratedPerson();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(2000);
+
+    }
+
 
     string searchResult = "";
     async Task LoadingList()
@@ -20,13 +39,16 @@
         searchResult = "Loading...";
         await Task.Delay(2000);
         searchResult = "found";
+        
     }
 
     private void PlaceHolder()
     {
-
+        genPerson.ReturnList();
 
     }
+
+   
 
     
 
