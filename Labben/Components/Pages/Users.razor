@@ -18,20 +18,35 @@
 
 else
 {
-    <table>
+    <table class="table">
         <thead>
             <tr>
                 <th>Id</th>
                 <th>Name</th>
-                <th></th>
-                <th></th>
-                <th></th>
+                <th>Email</th>
+                <th>Company</th>
+                <th>Company Catch Phrase</th>
+                <th>Street</th>
+                <th>City</th>
+                <th>Zipcode</th>
             </tr>
         </thead>
-        @foreach (Person user in genPerson.ReturnListAsync())
-        {
-    <p>@user.Company.CompanyName</p>
-}
+        <tbody>
+            @foreach (Person user in genPerson.ReturnListAsync())
+            {
+                <tr>
+                    <td>@user.Id</td>
+                    <td>@user.Name</td>
+                    <td>@user.EMail</td>
+                    <td>@user.Company.CompanyName</td>
+                    <td>@user.Company.CompanyCPhrase</td>
+                    <td>@user.Residence.Street</td>
+                    <td>@user.Residence.City</td>
+                    <td>@user.Residence.ZipCode</td>
+                </tr>
+            }
+        </tbody>
+
     </table>
 } 
     
