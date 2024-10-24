@@ -1,50 +1,64 @@
 ﻿@page "/Users"
-@rendermode InteractiveServer
+@* @rendermode InteractiveServer *@  @*Can't use rendermode. It made the page load twice*@
 @attribute [StreamRendering] 
 
-<h3>Users</h3>
+<PageTitle>Users</PageTitle>
+
+<h1>Users</h1>
 
 
 
-@if (genPerson.ReturnList == null)
+@if (showList != true)          @*Gotta do it like this since the list is being loaded to fast*@
 {
     <p><em>Loading...</em></p>    
+    <p>
+        <img src="/true.png"/>  @*Placeholder imagery*@
+    </p>
 }
 
 else
 {
-<button @onclick="LoadingList">loadlist</button>
-<p>@searchResult</p>
-
-@foreach (Person user in genPerson.ReturnList())
-{
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        @foreach (Person user in genPerson.ReturnListAsync())
+        {
     <p>@user.Company.CompanyName</p>
+}
+    </table>
+} 
+    
+@* <button @onclick="LoadingList">loadlist</button> *@
 
-}
-}
 
 @code {
     GeneratedPerson genPerson = new GeneratedPerson();
+    bool showList = false;
+
+    
 
     protected override async Task OnInitializedAsync()
-    {
+    {       
         await Task.Delay(2000);
-
+        showList = true;     
     }
 
 
-    string searchResult = "";
+    
     async Task LoadingList()
-    {
-        searchResult = "Loading...";
-        await Task.Delay(2000);
-        searchResult = "found";
-        
+    {                       
     }
 
     private void PlaceHolder()
     {
-        genPerson.ReturnList();
+        genPerson.ReturnListAsync();
 
     }
 
