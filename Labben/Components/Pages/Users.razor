@@ -32,11 +32,12 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (Person user in genPerson.ReturnListAsync())
+            @foreach (Person user in userList.GetUsers())
             {
                 <tr>
                     <td>@user.Id</td>
-                    <td>@user.Name</td>
+                    <td>@user.FirstName</td>
+                    <td>@user.LastName</td>
                     <td>@user.EMail</td>
                     <td>@user.Company.CompanyName</td>
                     <td>@user.Company.CompanyCPhrase</td>
@@ -54,6 +55,7 @@ else
 
 
 @code {
+    UserList userList = new UserList();
     GeneratedPerson genPerson = new GeneratedPerson();
     bool showList = false;
 
@@ -73,7 +75,7 @@ else
 
     private void PlaceHolder()
     {
-        genPerson.ReturnListAsync();
+        userList.GetUsers();
 
     }
 

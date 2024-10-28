@@ -1,0 +1,84 @@
+﻿@page "/NewUser"
+@rendermode InteractiveServer
+
+<h3>Component1</h3>
+
+ @if (isShowing)
+{
+    <EditForm Model="person" OnValidSubmit="ValidSubmitHandling">
+        <DataAnnotationsValidator />
+
+        First name:
+        <div>
+            <InputText id="FirstName" @bind-Value="person.FirstName"></InputText>
+            <ValidationMessage For="@(() => person.FirstName)" />
+        </div>  
+        
+        Last name:
+        <div>
+            <InputText id="LastName" @bind-Value="person.LastName" />
+            <ValidationMessage For="@(() => person.LastName)" />
+        </div>
+
+        E-mail: 
+        <div>
+            <InputText id="Email" @bind-Value="person.EMail" />
+            <ValidationMessage For="@(() => person.EMail)" />
+        </div>
+        
+        Company: 
+        <div>
+            <InputText id="CompanyName" @bind-Value="person.Company.CompanyName" />
+            <ValidationMessage For="@(() => person.Company.CompanyName)" />
+        </div>
+        
+        Company catch phrase: 
+        <div>
+            <InputText id="CompanyCPhrase" @bind-Value="person.Company.CompanyCPhrase" />
+            <ValidationMessage For="@(() => person.Company.CompanyCPhrase)" />
+        </div>
+
+        Street: 
+        <div>
+            <InputText id="Street" @bind-Value="person.Residence.Street" />
+            <ValidationMessage For="@(() => person.Residence.Street)" />
+        </div>
+
+        City: 
+        <div>
+            <InputText id="City" @bind-Value="person.Residence.City" />
+            <ValidationMessage For="@(() => person.Residence.City)" />
+        </div>
+
+        Zip code:
+        <div>
+            <InputNumber id="ZipCode" @bind-Value="person.Residence.ZipCode" />
+            <ValidationMessage For="@(() => person.Residence.ZipCode)" />
+        </div> 
+
+        <div style="margin-bottom: 10px; margin-top: 20px;">
+            <button type="Submit">Save</button>
+        </div>
+
+    </EditForm>
+}
+else
+{
+    
+} 
+
+@code {
+    Person person = new Person();
+    UserList listOfUsers = new UserList();
+    bool isShowing = true;
+    Random random = new Random();
+
+
+    private void ValidSubmitHandling()
+    {
+        person.Id = random.Next(0,9999);
+        listOfUsers.AddUser(person.Id, person.FirstName, person.LastName, person.EMail, person.Company.CompanyName, person.Company.CompanyCPhrase, person.Residence.Street, person.Residence.City, person.Residence.ZipCode);
+        isShowing = false;
+
+    }
+}
