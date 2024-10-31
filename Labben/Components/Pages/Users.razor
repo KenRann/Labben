@@ -1,10 +1,11 @@
 ﻿@page "/Users"
-@* @rendermode InteractiveServer *@  @*Can't use rendermode. It made the page load twice*@
+@* @rendermode InteractiveServer*@ @*Can't use rendermode. It made the page load twice*@
 @attribute [StreamRendering] 
+@using Microsoft.AspNetCore.Components.QuickGrid;
 
 <PageTitle>Users</PageTitle>
 
-<h1>Users</h1>
+<h1 style="text-decoration: underline">Users</h1>
 
 
 
@@ -12,7 +13,7 @@
 {
     <p><em>Loading...</em></p>    
     <p>
-        <img src="/true.png"/>  @*Placeholder imagery*@
+        <img src="/true.png" style="width: 500px; height: auto;" />  @*Placeholder imagery*@
     </p>
 }
 
@@ -22,7 +23,8 @@ else
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Name</th>
+                <th>First Name</th>
+                <th>Last Name</th>
                 <th>Email</th>
                 <th>Company</th>
                 <th>Company Catch Phrase</th>
@@ -32,7 +34,8 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (Person user in userList.GetUsers())
+            
+            @foreach (Person user in SortByFirstName(listOfUsers))
             {
                 <tr>
                     <td>@user.Id</td>
@@ -48,36 +51,34 @@ else
             }
         </tbody>
 
-    </table>
+    </table>    
 } 
     
 @* <button @onclick="LoadingList">loadlist</button> *@
 
 
 @code {
-    UserList userList = new UserList();
-    GeneratedPerson genPerson = new GeneratedPerson();
+    UserList listOfUsers = new UserList();    
     bool showList = false;
 
-    
-
     protected override async Task OnInitializedAsync()
-    {       
+    {
+        UserList userList = new UserList();
         await Task.Delay(2000);
         showList = true;     
     }
 
-
-    
-    async Task LoadingList()
-    {                       
-    }
-
-    private void PlaceHolder()
+    public List<Person> SortByFirstName(UserList listOfUsers)
     {
-        userList.GetUsers();
-
+        IEnumerable<Person> firstName =
+        from user in listOfUsers.GetUsers()
+        orderby user.FirstName ascending
+        select user;
+        return firstName.ToList();
     }
+
+
+
 
    
 

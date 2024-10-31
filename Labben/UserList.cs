@@ -5,7 +5,7 @@ namespace Labben
 {
     public class UserList
     {
-        public List<Person> listOfPeople = new()
+        private List<Person> _listOfPeople = new List<Person>
         {
                     new Person(8901, "Emma", "Lindström", "emma.lindstrom@Gmail.com",new Company("Blomsterdesign AB", "Skapa ditt drömrum med naturens skönhet."), new Residence("Månskenstorget 3", "Stockholm", 18429)),
                     new Person(4567, "Felix", "Andersson", "felix.andersson@Yahoo.com", new Company("TechSolutions Group", "Framtiden börjar här, med smarta lösningar."), new Residence("Karamellvägen 9","Umeå",17302)),
@@ -24,17 +24,22 @@ namespace Labben
         }
         public void AddUser(int id, string fName, string lName,  string email, string companyName, string companyCPhrase, string street, string city, int zipCode)
         {
-            listOfPeople.Add(new Person(id, fName, lName, email, new Company(companyName, companyCPhrase),  new Residence(street, city, zipCode)));
+            _listOfPeople.Add(new Person(id, fName, lName, email, new Company(companyName, companyCPhrase),  new Residence(street, city, zipCode)));
+        }
+
+        public List<int> GetId()
+        {
+            return _listOfPeople.Select(p => p.Id).ToList();
         }
 
         public List<Person> GetUsers()
-        {
-            return listOfPeople;
+        {            
+            return _listOfPeople;
         }
 
         public Person GetLastUser()
         { 
-            Person lastUser = listOfPeople.Last();
+            Person lastUser = _listOfPeople.Last();
             return lastUser;
         }
     }

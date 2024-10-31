@@ -1,16 +1,20 @@
 ﻿@page "/NewUser"
 @rendermode InteractiveServer
 
-<h3>Component1</h3>
+<h3 style="font-size: 50px;">Welcome!</h3>
+<div>
+<p style="text-decoration: underline; font-size: 20px">Please give me all your details!</p>
+</div>
 
  @if (isShowing)
 {
-    <EditForm Model="person" OnValidSubmit="ValidSubmitHandling">
-        <DataAnnotationsValidator />
-
+    <EditForm Model="person" OnValidSubmit="ValidSubmitHandling">        
+        <ObjectGraphDataAnnotationsValidator />
+        
+        @*-- Personal --*@
         First name:
         <div>
-            <InputText id="FirstName" @bind-Value="person.FirstName"></InputText>
+            <InputText id="FirstName" @bind-Value="person.FirstName" />
             <ValidationMessage For="@(() => person.FirstName)" />
         </div>  
         
@@ -26,6 +30,7 @@
             <ValidationMessage For="@(() => person.EMail)" />
         </div>
         
+        @*-- Company --*@
         Company: 
         <div>
             <InputText id="CompanyName" @bind-Value="person.Company.CompanyName" />
@@ -36,8 +41,9 @@
         <div>
             <InputText id="CompanyCPhrase" @bind-Value="person.Company.CompanyCPhrase" />
             <ValidationMessage For="@(() => person.Company.CompanyCPhrase)" />
-        </div>
-
+        </div> 
+        
+        @*-- Residence --*@
         Street: 
         <div>
             <InputText id="Street" @bind-Value="person.Residence.Street" />
@@ -54,31 +60,91 @@
         <div>
             <InputNumber id="ZipCode" @bind-Value="person.Residence.ZipCode" />
             <ValidationMessage For="@(() => person.Residence.ZipCode)" />
-        </div> 
-
+        </div>
+    
         <div style="margin-bottom: 10px; margin-top: 20px;">
-            <button type="Submit">Save</button>
+            <button type="Submit" >Save</button>
+            
         </div>
 
     </EditForm>
+    <button @onclick="QuickAddUser">Too lazy to manually type info?</button>
 }
 else
 {
-    
+    @*-- Personal --*@
+    <p style="font-size: 16px; text-decoration: underline">Personal information</p>
+    <p>Id: @person.Id</p>
+    <p>First name: @person.FirstName</p>
+    <p>Last name: @person.LastName</p>
+    <p>E-Mail: @person.EMail</p>
+
+    @*-- Company --*@
+    <p style="font-size: 16px; text-decoration: underline">Company information</p>  
+    <p>Company: @person.Company.CompanyName</p>
+    <p>Company catch phrase: @person.Company.CompanyCPhrase</p>
+
+    @*-- Residence --*@
+    <p style="font-size: 16px; text-decoration: underline">Residence information</p>
+    <p>Street: @person.Residence.Street</p>
+    <p>City: @person.Residence.City</p>
+    <p>Zip code: @person.Residence.ZipCode</p>
+
+    <button @onclick="AddAnotherUser" >New</button>
 } 
 
 @code {
-    Person person = new Person();
+    Person person = new Person(0, "", "", "", new Company("", ""), new Residence("", "", 0)); 
+
     UserList listOfUsers = new UserList();
     bool isShowing = true;
     Random random = new Random();
 
-
     private void ValidSubmitHandling()
-    {
-        person.Id = random.Next(0,9999);
-        listOfUsers.AddUser(person.Id, person.FirstName, person.LastName, person.EMail, person.Company.CompanyName, person.Company.CompanyCPhrase, person.Residence.Street, person.Residence.City, person.Residence.ZipCode);
+    {        
+        GenerateUserID();
+        listOfUsers.AddUser(
+            person.Id, 
+            person.FirstName, 
+            person.LastName, 
+            person.EMail, 
+            person.Company.CompanyName,
+            person.Company.CompanyCPhrase, 
+            person.Residence.Street, 
+            person.Residence.City, 
+            person.Residence.ZipCode
+        );
         isShowing = false;
+    }
 
+    private void AddAnotherUser()
+    {
+        isShowing = true;
+        person = new Person(0, "", "", "", new Company("", ""), new Residence("", "", 0));
+    }
+
+    private void QuickAddUser()
+    {
+        person.FirstName = "Karl";
+        person.LastName = "Bengtsson";
+        person.EMail = "karl.bengtsson@gmail.com";
+        person.Company.CompanyName = "Snett, vint och skevt AB";
+        person.Company.CompanyCPhrase = "Ring gärna, men inte oss!";
+        person.Residence.Street = "Nonyabusiness 1";
+        person.Residence.City = "Ingenmannsland";
+        person.Residence.ZipCode = 69696;
+    }
+
+    private void GenerateUserID()
+    {
+        person.Id = random.Next(0, 9999);
+
+        foreach (var id in listOfUsers.GetId())
+        {
+            if (person.Id == id)
+            {
+                person.Id = random.Next(0, 9999);
+            }
+        }
     }
 }

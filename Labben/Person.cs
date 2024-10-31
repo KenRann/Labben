@@ -22,7 +22,11 @@ namespace Labben
         [EmailAddress]
         public string EMail { get { return _email; } set { _email = value; } }
 
+        //[Required]
+        [ValidateComplexType]
         public Company Company { get; set; }
+        //[Required]
+        [ValidateComplexType]
         public Residence Residence { get; set; }
 
         public Person()
