@@ -6,9 +6,9 @@ namespace Labben
     public class UserList : IGetUsers
     {
         private List<Person> _listOfPeople = new List<Person>
-        {
-                    new Person(8901, "Emma", "Lindström", "emma.lindstrom@Gmail.com",new Company("Blomsterdesign AB", "Skapa ditt drömrum med naturens skönhet."), new Residence("Månskenstorget 3", "Stockholm", 18429)),
+        {                   
                     new Person(4567, "Felix", "Andersson", "felix.andersson@Yahoo.com", new Company("TechSolutions Group", "Framtiden börjar här, med smarta lösningar."), new Residence("Karamellvägen 9","Umeå",17302)),
+                    new Person(8901, "Emma", "Lindström", "emma.lindstrom@Gmail.com",new Company("Blomsterdesign AB", "Skapa ditt drömrum med naturens skönhet."), new Residence("Månskenstorget 3", "Stockholm", 18429)),
                     new Person(0123, "Nora", "Karlsson","nora.karlsson@Exec.com", new Company("Grön Energi Sverige", "Tillsammans för en hållbar framtid."),new Residence("Granitgatan 19","Uppsala",17942)),
                     new Person(6789, "Leo", "Eriksson","leo.eriksson@Hotmail.com", new Company("Kreativa Byrån", "Din vision, vår kreativitet."),new Residence("Vitsippsstigen 4","Malmö",19420)),
                     new Person(2345, "Sofia", "Björk","sofia.bjork@Outlook.com",new Company("Mat & Mer Restaurang", "Smaker som förenar."),new Residence("Sjögrens Gata 22","Göteborg",18582)),
@@ -36,11 +36,5 @@ namespace Labben
             IQueryable<Person> listOfPeople = _listOfPeople.AsQueryable();
             return listOfPeople;
         }
-
-        //public Person GetLastUser()
-        //{ 
-        //    Person lastUser = _listOfPeople.Last();
-        //    return lastUser;
-        //}
     }
 }
