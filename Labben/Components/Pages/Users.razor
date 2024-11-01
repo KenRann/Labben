@@ -1,7 +1,10 @@
 ﻿@page "/Users"
-@* @rendermode InteractiveServer*@ @*Can't use rendermode. It made the page load twice*@
-@attribute [StreamRendering] 
+@rendermode @(new InteractiveServerRenderMode(false))
+@* @rendermode InteractiveServer  *@
+@*Can't use rendermode. It made the page load twice*@
+@attribute [StreamRendering]
 @using Microsoft.AspNetCore.Components.QuickGrid;
+
 
 <PageTitle>Users</PageTitle>
 
@@ -11,7 +14,7 @@
 
 @if (showList != true)          @*Gotta do it like this since the list is being loaded to fast*@
 {
-    <p><em>Loading...</em></p>    
+    <p><em>Loading...</em></p>
     <p>
         <img src="/true.png" style="width: 500px; height: auto;" />  @*Placeholder imagery*@
     </p>
@@ -34,8 +37,8 @@ else
             </tr>
         </thead>
         <tbody>
-            
-            @foreach (Person user in SortByFirstName(listOfUsers))
+
+            @foreach (Person user in SortByFirstName(listOfUsers))            
             {
                 <tr>
                     <td>@user.Id</td>
@@ -51,21 +54,46 @@ else
             }
         </tbody>
 
-    </table>    
-} 
-    
+    </table>
+
+      @* <QuickGrid Items="@listOfUsers.GetUsers()">   *@
+      <QuickGrid Items="@FilterUser">  
+        @* <QuickGrid Items="@SearchFunction(listOfUsers)"> *@
+        @* <QuickGrid Items="@SearchFunction(userList)"> *@       
+        <PropertyColumn Property="@(u => u.Id)" Sortable="true" />
+        <PropertyColumn Property="@(u => u.FirstName)" Sortable="true">
+                        <ColumnOptions>
+                <div class="search-box">
+                    <input type="search" autofocus @bind="listFilter" @bind:event="oninput" placeholder="User first name"/>
+                </div>
+            </ColumnOptions>
+        </PropertyColumn>
+        <PropertyColumn Property="@(u => u.LastName)" Sortable="true" />
+        <PropertyColumn Property="@(u => u.EMail)" Sortable="true" />
+        <PropertyColumn Property="@(u => u.Company.CompanyName)" Sortable="true" />
+        <PropertyColumn Property="@(u => u.Company.CompanyCPhrase)" Sortable="true" />
+        <PropertyColumn Property="@(u => u.Residence.Street)" Sortable="true" />
+        <PropertyColumn Property="@(u => u.Residence.City)" Sortable="true" />
+        <PropertyColumn Property="@(u => u.Residence.ZipCode)" Sortable="true" />
+    </QuickGrid>
+}
+
 @* <button @onclick="LoadingList">loadlist</button> *@
 
 
 @code {
-    UserList listOfUsers = new UserList();    
+    UserList listOfUsers = new UserList();
+    IQueryable<Person>? userList;
     bool showList = false;
+    string? listFilter;
+
+    IQueryable<Person> FilterUser { get { var result = userList; if (!string.IsNullOrEmpty(listFilter)){ result = result?.Where(u => u.FirstName.Contains(listFilter)); } return result; } }
 
     protected override async Task OnInitializedAsync()
     {
-        UserList userList = new UserList();
+        userList = listOfUsers.GetUsers();
         await Task.Delay(2000);
-        showList = true;     
+        showList = true;
     }
 
     public List<Person> SortByFirstName(UserList listOfUsers)
@@ -77,11 +105,16 @@ else
         return firstName.ToList();
     }
 
+    private IQueryable<Person> SearchFunction(IQueryable? userList)
+    {
+        var result = listOfUsers?.GetUsers().Where(u => u.FirstName.Contains(listFilter));
+        
+        return result;
+    }
 
 
 
-   
 
-    
+
 
 }

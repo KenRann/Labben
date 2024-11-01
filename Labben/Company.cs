@@ -22,24 +22,3 @@ namespace Labben
         }
     }
 }
-//    "Blomsterdesign AB",
-//    "TechSolutions Group",
-//    "Grön Energi Sverige",
-//    "Kreativa Byrån",
-//    "Mat & Mer Restaurang", 
-//    "Svenska Byggteamet",
-//    "Digitala Visioner", 
-//    "Hälsosamma Val", 
-//    "Kultur & Nöje", 
-//    "Nordisk Logistik" 
-
-//    "Skapa ditt drömrum med naturens skönhet.",
-//    "Framtiden börjar här, med smarta lösningar.",
-//    "Tillsammans för en hållbar framtid.",
-//    "Din vision, vår kreativitet.",
-//    "Smaker som förenar.",
-//    "Bygger framtiden, sten för sten.",
-//    "Vi förverkligar dina digitala drömmar.",
-//    "Din väg till en bättre livsstil.",
-//    "Upplev mer, lev mer.",
-//    "Effektivitet som når fram."

@@ -3,7 +3,7 @@ using System.Xml.Linq;
 
 namespace Labben
 {
-    public class UserList
+    public class UserList : IGetUsers
     {
         private List<Person> _listOfPeople = new List<Person>
         {
@@ -20,7 +20,6 @@ namespace Labben
         };
         public UserList()
         {
-
         }
         public void AddUser(int id, string fName, string lName,  string email, string companyName, string companyCPhrase, string street, string city, int zipCode)
         {
@@ -32,15 +31,16 @@ namespace Labben
             return _listOfPeople.Select(p => p.Id).ToList();
         }
 
-        public List<Person> GetUsers()
+        public IQueryable<Person> GetUsers()
         {            
-            return _listOfPeople;
+            IQueryable<Person> listOfPeople = _listOfPeople.AsQueryable();
+            return listOfPeople;
         }
 
-        public Person GetLastUser()
-        { 
-            Person lastUser = _listOfPeople.Last();
-            return lastUser;
-        }
+        //public Person GetLastUser()
+        //{ 
+        //    Person lastUser = _listOfPeople.Last();
+        //    return lastUser;
+        //}
     }
 }

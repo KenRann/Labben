@@ -28,35 +28,3 @@ namespace Labben
         }
     }
 }
-//    "Månskenstorget 3",
-//    "Karamellvägen 9",
-//    "Granitgatan 19",
-//    "Vitsippsstigen 4",
-//    "Sjögrens Gata 22",
-//    "Stjärnklara Torg 5",
-//    "Ekbacksvägen 34,",
-//    "Ljusets Allé 88",
-//    "Rödklövergatan 7",
-//    "Solrosvägen 12"
-
-//    "Stockholm",
-//    "Umeå",
-//    "Uppsala",
-//    "Malmö",
-//    "Göteborg",
-//    "Kiruna",
-//    "Stockholm",
-//    "Malmö",
-//    "Norrköping",
-//    "Göteborg"
-
-//    18429,
-//    17302,
-//    17942,
-//    19420,
-//    18582,
-//    17890,
-//    17382, 
-//    19846, 
-//    18677,
-//    18953  

@@ -22,10 +22,9 @@ namespace Labben
         [EmailAddress]
         public string EMail { get { return _email; } set { _email = value; } }
 
-        //[Required]
         [ValidateComplexType]
         public Company Company { get; set; }
-        //[Required]
+
         [ValidateComplexType]
         public Residence Residence { get; set; }
 
@@ -44,35 +43,3 @@ namespace Labben
         }
     }
 }
-//    8901,
-//    4567,
-//    0123,
-//    6789,
-//    2345,
-//    7890,
-//    3456,
-//    9012,
-//    5678,
-//    1234
-
-//    "Emma Lindström",
-//    "Felix Andersson",
-//    "Nora Karlsson",
-//    "Leo Eriksson",
-//    "Sofia Björk",
-//    "Max Johansson",
-//    "Alva Nilsson",
-//    "Oliver Svensson",
-//    "Klara Pettersson",
-//    "Axel Gustafsson"
-
-//    "emma.lindstrom@Gmail.com",
-//    "felix.andersson@Yahoo.com",
-//    "nora.karlsson@Exec.com",
-//    "leo.eriksson@Hotmail.com",
-//    "sofia.bjork@Outlook.com",
-//    "max.johansson@Gmail.com",
-//    "alva.nilsson@Outlook.com",
-//    "oliver.svensson@Yahoo.com",
-//    "klara.pettersson@Exec.com",
-//    "axel.gustafsson@example.com"
