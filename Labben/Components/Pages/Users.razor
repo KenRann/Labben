@@ -1,6 +1,6 @@
 ﻿@page "/Users"
 @rendermode @(new InteractiveServerRenderMode(false))
-@* @rendermode InteractiveServer  *@
+ @* @rendermode InteractiveServer   *@
 @*Can't use rendermode. It made the page load twice*@
 @attribute [StreamRendering]
 @using Microsoft.AspNetCore.Components.QuickGrid;
@@ -56,12 +56,9 @@ else
 
     </table>
 
-      @* <QuickGrid Items="@listOfUsers.GetUsers()">   *@
-      <QuickGrid Items="@FilterUser">  
-        @* <QuickGrid Items="@SearchFunction(listOfUsers)"> *@
-        @* <QuickGrid Items="@SearchFunction(userList)"> *@       
+      <QuickGrid Items="@FilterUser">     
         <PropertyColumn Property="@(u => u.Id)" Sortable="true" />
-        <PropertyColumn Property="@(u => u.FirstName)" Sortable="true">
+        <PropertyColumn Property="@(u => u.FirstName)" Sortable="true" IsDefaultSortColumn="true">
                         <ColumnOptions>
                 <div class="search-box">
                     <input type="search" autofocus @bind="listFilter" @bind:event="oninput" placeholder="User first name"/>
@@ -91,7 +88,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        userList = listOfUsers.GetUsers();
+        userList = await listOfUsers.GetUsers();
         await Task.Delay(2000);
         showList = true;
     }
@@ -105,12 +102,6 @@ else
         return firstName.ToList();
     }
 
-    private IQueryable<Person> SearchFunction(IQueryable? userList)
-    {
-        var result = listOfUsers?.GetUsers().Where(u => u.FirstName.Contains(listFilter));
-        
-        return result;
-    }
 
 
 
