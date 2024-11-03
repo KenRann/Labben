@@ -40,9 +40,6 @@ else
     <button @onclick="@ShowListAmount">@buttonText</button>
 }
 
-
-
-
 @code {
     UserList listOfUsers = new UserList();
     IQueryable<Person>? userList;
@@ -78,7 +75,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        // userList = listOfUsers.GetUsers();
+
         userList = SortByFirstName(listOfUsers);
         await Task.Delay(2000);
         showList = true;
