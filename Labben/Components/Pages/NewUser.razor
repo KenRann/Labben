@@ -94,7 +94,7 @@ else
 } 
 
 @code {
-    Person person = new Person(0, "", "", "", new Company("", ""), new Residence("", "", 0)); 
+    Person person = new Person(0, "", "", "", new Company("", ""), new Address("", "", 0)); 
 
     UserList listOfUsers = new UserList();
     bool isShowing = true;
@@ -120,7 +120,7 @@ else
     private void AddAnotherUser()
     {
         isShowing = true;
-        person = new Person(0, "", "", "", new Company("", ""), new Residence("", "", 0));
+        person = new Person(0, "", "", "", new Company("", ""), new Address("", "", 0));
     }
 
     private void QuickAddUser()
@@ -129,10 +129,10 @@ else
         person.LastName = "Bengtsson";
         person.EMail = "karl.bengtsson@gmail.com";
         person.Company.CompanyName = "Snett, vint och skevt AB";
-        person.Company.CompanyCPhrase = "Ring gärna, men inte oss!";
-        person.Residence.Street = "Nonyabusiness 1";
+        person.Company.CompanyCPhrase = "Ring gärna, men inte oss.";
+        person.Residence.Street = "Nonya 1";
         person.Residence.City = "Ingenmannsland";
-        person.Residence.ZipCode = 69696;
+        person.Residence.ZipCode = 16545;
     }
 
     private void GenerateUserID()

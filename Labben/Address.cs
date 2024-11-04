@@ -2,7 +2,7 @@
 
 namespace Labben
 {
-    public class Residence
+    public class Address
     {
         private string _street;
         private string _city;
@@ -20,7 +20,7 @@ namespace Labben
         [Range(1000,99999)]
         public int ZipCode { get { return _zipCode; } set { _zipCode = value; } }
 
-        public Residence(string street, string city, int zipCode)
+        public Address(string street, string city, int zipCode)
         {
             Street = street;
             City = city;

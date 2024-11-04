@@ -26,13 +26,12 @@ namespace Labben
         public Company Company { get; set; }
 
         [ValidateComplexType]
-        public Residence Residence { get; set; }
+        public Address Residence { get; set; }
 
         public Person()
         {           
         }
-
-        public Person(int id, string fName, string lName, string email, Company company, Residence residence)
+        public Person(int id, string fName, string lName, string email, Company company, Address residence) // My 10 generated users
         {
             Id = id;
             _fName = fName;

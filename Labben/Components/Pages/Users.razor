@@ -10,8 +10,6 @@
 
 <h1 style="text-decoration: underline">Users</h1>
 
-
-
 @if (showList != true)          @*Gotta do it like this since the list is being loaded to fast*@
 {
     <p><em>Loading...</em></p>
@@ -34,7 +32,7 @@ else
         <PropertyColumn Property="@(u => u.Residence.ZipCode)" Sortable="true" />
     </QuickGrid>
     <div class="search-box">
-        <input type="search" @bind="listFilter" @bind:event="oninput"  />
+        <input type="search" @bind="listFilter" @bind:event="oninput" placeholder="Search..." />
     </div>
 
     <button @onclick="@ShowListAmount">@buttonText</button>
@@ -43,6 +41,7 @@ else
 @code {
     UserList listOfUsers = new UserList();
     IQueryable<Person>? userList;
+    
 
     int limitByAmount = 5;
     string? listFilter;
@@ -75,19 +74,16 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-
-        userList = SortByFirstName(listOfUsers);
         await Task.Delay(2000);
+        userList = SortByFirstName(listOfUsers);       
         showList = true;
     }
 
-    private IQueryable<Person> SortByFirstName(UserList listOfUsers)
+    private IQueryable<Person> SortByFirstName(IGetUsers listOfUsers)
     {
-        IEnumerable<Person> firstName =
-        from user in listOfUsers.GetUsers()
-        orderby user.FirstName ascending
-        select user;
-        return firstName.ToList().AsQueryable();
+        IQueryable<Person> firstName = listOfUsers.GetUsers().OrderBy(u => u.FirstName).ThenBy(u => u.Id);
+
+        return firstName;
     }
 
     private void ShowListAmount()
