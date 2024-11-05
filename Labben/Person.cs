@@ -11,7 +11,6 @@ namespace Labben
         string? _name;
         string? _lName;
         string? _email;
-
         string _userName;
         string _phone;
         string _website;
@@ -44,18 +43,20 @@ namespace Labben
         public Person()
         {           
         }
-        //public Person(int id, string name, string username, string eMail, Address address, string phone, string website, Company company)
-        //{
-        //    Id = id;
-        //    Name = name;
-        //    UserName = username;
-        //    EMail = eMail;
-        //    Address = address;
-        //    Phone = phone;
-        //    Website = website;
-        //    Company = company;
-        //    Address = address;
-        //}
+
+        [JsonConstructor]
+        public Person(int id, string name, string username, string eMail, Address address, string phone, string website, Company company)
+        {
+            Id = id;
+            Name = name;
+            UserName = username;
+            EMail = eMail;
+            Address = address;
+            Phone = phone;
+            Website = website;
+            Company = company;
+            
+        }
         public Person(int id, string name, string email, Company company, Address residence) 
         {
             Id = id;

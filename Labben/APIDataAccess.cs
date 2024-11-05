@@ -7,8 +7,7 @@ namespace Labben
     {
         private readonly string _source;
         string? response;       
-        JsonSerializerOptions options = new JsonSerializerOptions
-        { PropertyNameCaseInsensitive = true };
+
 
         public APIDataAccess()
         {
@@ -44,6 +43,9 @@ namespace Labben
         {
             try
             {
+                JsonSerializerOptions options = new JsonSerializerOptions
+                { PropertyNameCaseInsensitive = true };
+
                 var deserializedData = JsonSerializer.Deserialize<List<Person>>(apiJsonData, options);
                 return deserializedData;
             }

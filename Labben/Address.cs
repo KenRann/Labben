@@ -28,14 +28,15 @@ namespace Labben
 
         public Geo Geo { get; set; }
 
-        //public Address(string street, string suite, string city, int zipCode, Geo geo)
-        //{
-        //    Street = street;
-        //    Suite = suite;
-        //    City = city;
-        //    ZipCode = zipCode;
-        //    Geo = geo;
-        //}
+        [JsonConstructor]
+        public Address(string street, string suite, string city, string zipCode, Geo geo)
+        {
+            Street = street;
+            Suite = suite;
+            City = city;
+            ZipCode = zipCode;
+            Geo = geo;
+        }
         public Address(string street, string city, string zipCode)
         {
             Street = street;

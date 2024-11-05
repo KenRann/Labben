@@ -13,19 +13,21 @@ namespace Labben
         [StringLength(50, MinimumLength =2)]
         public string Name { get { return _name; } set { _name = value; } }
 
-        [Required]
-        [StringLength(75, MinimumLength =2)]
+        //[Required]
+        //[StringLength(75, MinimumLength = 2)]
         public string CatchPhrase { get { return _catchPhrase; } set { _catchPhrase = value; } }
 
-        [JsonIgnore]
+        //[JsonIgnore]
         public string Bs { get { return _bs; } set { _bs = value; } }
 
+        [JsonConstructor]
         public Company(string compName, string compCPhrase, string bs)
         {
             Name = compName;
             CatchPhrase = compCPhrase;
             Bs = bs;
         }
+        
         public Company(string compName, string compCPhrase)
         {
             Name = compName;

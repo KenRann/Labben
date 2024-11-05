@@ -12,11 +12,12 @@ namespace Labben
         [JsonIgnore]
         public string Lng { get { return _lng; } set { _lng = value; } }
 
-        //public Geo(string lat, string lng)
-        //{
-        //    Lat = lat;
-        //    Lng = lng;
-        //}
+        [JsonConstructor]
+        public Geo(string lat, string lng)
+        {
+            Lat = lat;
+            Lng = lng;
+        }
         public Geo()
         {
         }
