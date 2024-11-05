@@ -3,37 +3,77 @@ using static System.Net.WebRequestMethods;
 
 namespace Labben
 {
-    public class APIDataAccess
+    public class APIDataAccess : IGetUsers
     {
-        private readonly string _source = "https://jsonplaceholder.typicode.com/users";
-        string? response;
+        private readonly string _source;
+        string? response;       
+        JsonSerializerOptions options = new JsonSerializerOptions
+        { PropertyNameCaseInsensitive = true };
+
         public APIDataAccess()
         {
 
         }
 
-        public async Task GetDataAsync()
+        public async Task<string> GetDataAsync()
         {
             try
             {
                 using HttpClient client = new HttpClient();
 
-                Task<string> getData = client.GetStringAsync(_source);
+                var retrievedData = await client.GetStringAsync("https://jsonplaceholder.typicode.com/users");
 
-                response = await getData;
-            }
-            catch (InvalidOperationException)
-            { throw; }
-            catch (HttpRequestException)
-            { throw; }
-            catch (TaskCanceledException) 
-            { throw; }
+                return retrievedData;
 
         }
+            catch (InvalidOperationException)
+            {
+                Console.WriteLine("1");
+                throw; }
+            catch (HttpRequestException)
+            {
+                Console.WriteLine("2");
+                throw; }
+            catch (TaskCanceledException)
+            {
+                Console.WriteLine("3");
+                throw; }           
+        }
 
-        public void ReadData()
+        public List<Person> DeserializeAPIData(string apiJsonData)
+        {
+            try
+            {
+                var deserializedData = JsonSerializer.Deserialize<List<Person>>(apiJsonData, options);
+                return deserializedData;
+            }
+            catch (JsonException ex)
+            {
+                Console.WriteLine($"Deserialization error: {ex.Message}");
+                throw;
+            }
+            //return JsonSerializer.Deserialize<List<Person>>(apiJsonData, options);
+        }
+
+        public async Task<IQueryable<Person>> GetUsersAsync()
+        {
+            //IQueryable<Person> userData = JsonSerializer.Deserialize<IQueryable<Person>>(response, options);
+            //return userData;
+            try
+            {
+                var json = await GetDataAsync();
+                var users = DeserializeAPIData(json);
+                return users.AsQueryable();
+            }
+            catch {
+                Console.WriteLine("hej"); 
+                throw; }
+            //return DeserializeAPIData(GetDataAsync().Result).AsQueryable(); 
+        }
+
+        public IQueryable<Person> GetUsersSync()
         { 
-            Person userData = JsonSerializer.Deserialize<Person>(response);
+            throw new NotImplementedException();
         }
 
         //public IQueryable<Person> GetUsers()
