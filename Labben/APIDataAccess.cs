@@ -1,39 +1,32 @@
-﻿using System.Text.Json;
+﻿using Labben;
+using System.Text.Json;
 using static System.Net.WebRequestMethods;
 
 namespace Labben
 {
-    public class APIDataAccess
+    public class APIDataAccess : IGetUsers
     {
-        private readonly string _source;
-        string? response;       
-
+        private readonly string _dataSource = "https://jsonplaceholder.typicode.com/users";
 
         public APIDataAccess()
-        {
+        { }
 
-        }
-
-        public async Task GetDataAsync()
+        public async Task<string> GetDataAsync()
         {
             try
             {
                 using HttpClient client = new HttpClient();
 
-                Task<string> getData = client.GetStringAsync(_source);
+                var getData = await client.GetStringAsync(_dataSource);
 
-                response = await getData;
+                return getData;
             }
             catch (InvalidOperationException)
             { throw; }
             catch (HttpRequestException)
-            {
-                Console.WriteLine("2");
-                throw; }
+            { throw; }
             catch (TaskCanceledException)
-            {
-                Console.WriteLine("3");
-                throw; }           
+            { throw; }
         }
 
         public List<Person> DeserializeAPIData(string apiJsonData)
@@ -51,19 +44,25 @@ namespace Labben
                 Console.WriteLine($"Deserialization error: {ex.Message}");
                 throw;
             }
-            //return JsonSerializer.Deserialize<List<Person>>(apiJsonData, options);
         }
 
+        public async Task<IQueryable<Person>> GetUsersAsync()
+        {
+            try
+            {
+                var json = await GetDataAsync();
+                var users = DeserializeAPIData(json);
+                return users.AsQueryable();
+            }
+            catch
+            {
+                throw;
+            }
         }
 
-        public void ReadData()
-        { 
-            Person userData = JsonSerializer.Deserialize<Person>(response);
+        public IQueryable<Person> GetUsersSync()
+        {
+            throw new NotImplementedException();
         }
-
-        //public IQueryable<Person> GetUsers()
-        //{
-
-        //}
-    }
+    }  
 }

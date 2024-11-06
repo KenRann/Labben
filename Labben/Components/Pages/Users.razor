@@ -1,90 +1,143 @@
 ﻿@page "/Users"
 @rendermode @(new InteractiveServerRenderMode(false))
 @* @rendermode InteractiveServer *@
-@*Can't use rendermode. It made the page load twice*@
 @attribute [StreamRendering]
 @using Microsoft.AspNetCore.Components.QuickGrid;
 
 
+
 <PageTitle>Users</PageTitle>
 
-<h1 style="text-decoration: underline">Users</h1>
+
 
 @if (showList != true)          @*Gotta do it like this since the list is being loaded to fast*@
 {
-    <p><em>Loading...</em></p>
-    <p>
-        <img src="/true.png" style="width: 500px; height: auto;" />  @*Placeholder imagery*@
+    <p class="text-center" style="font-size: 20px; margin: 150px 40px 30px 50px"><em>Loading users...</em></p>
+    <p class="text-center">
+        <iframe src="https://giphy.com/embed/3oEjI6SIIHBdRxXI40"
+                width="380"
+                height="380"
+                style=""
+                frameBorder="0"
+                class="giphy-embed"
+                allowFullScreen>
+        </iframe>
     </p>
 }
 
 else
 {
-      <QuickGrid Items="@FilterUser" >     
-        <PropertyColumn Property="@(u => u.Id)" Sortable="true" />
-        <PropertyColumn Property="@(u => u.FirstName)" Sortable="true"  />
-        <PropertyColumn Property="@(u => u.LastName)" Sortable="true" />
-        <PropertyColumn Property="@(u => u.EMail)" Sortable="true" />
-        <PropertyColumn Property="@(u => u.Company.CompanyName)" Sortable="true" />
-        <PropertyColumn Property="@(u => u.Company.CompanyCPhrase)" Sortable="true" />
-        <PropertyColumn Property="@(u => u.Residence.Street)" Sortable="true" />
-        <PropertyColumn Property="@(u => u.Residence.City)" Sortable="true" />
-        <PropertyColumn Property="@(u => u.Residence.ZipCode)" Sortable="true" />
-    </QuickGrid>
+    <h1 style="text-decoration: underline; text-align: center">Users</h1>
+
     <div class="search-box">
+        <label for="listSource">List: </label>
+        <select id="listSource" @onchange="ListOption">
+            <option value="A">A</option>
+            <option value="B">API</option>
+        </select>
+        <button @onclick="@ShowListAmount">@buttonText</button>
         <input type="search" @bind="listFilter" @bind:event="oninput" placeholder="Search..." />
     </div>
 
-    <button @onclick="@ShowListAmount">@buttonText</button>
+    <QuickGrid Items="@FilterUser">
+
+        <PropertyColumn Property="@(u => u.Id)" Sortable="true" />
+        <PropertyColumn Property="@(u => u.Name)" Sortable="true" />
+        @if (showColumn)
+        {
+        <PropertyColumn Property="@(u => u.UserName)" Sortable="true" Title="Username" />
+        }
+        <PropertyColumn Property="@(u => u.EMail)" Sortable="true" Title="E-mail" />
+        <PropertyColumn Property="@(u => u.Company.Name)" Sortable="true" Title="Company" />
+        <PropertyColumn Property="@(u => u.Company.CatchPhrase)" Sortable="true" Title="Catch phrase" />
+        <PropertyColumn Property="@(u => u.Address.Street)" Sortable="true" />
+        <PropertyColumn Property="@(u => u.Address.City)" Sortable="true" />
+        <PropertyColumn Property="@(u => u.Address.ZipCode)" Sortable="true" Title="Zip code" />
+    </QuickGrid>
+
 }
 
 @code {
-    UserList listOfUsers = new UserList();
+    UserList users = new UserList();
+    APIDataAccess usersAPI = new APIDataAccess();
     IQueryable<Person>? userList;
-    
 
     int limitByAmount = 5;
     string? listFilter;
     bool showList = false;
+    bool showColumn = false;
 
     bool limitList = true;
-    string buttonText => limitList? "Show more" : "Show less" ;
+    string buttonText => limitList ? "Show all" : "Show less";
 
-    IQueryable<Person> FilterUser { get { 
+    IQueryable<Person> FilterUser
+    {
+        get
+        {
             var result = userList;
             if (!string.IsNullOrEmpty(listFilter))
             {
                 result = result?.Where(u =>
                     u.Id.ToString().Contains(listFilter, StringComparison.OrdinalIgnoreCase) ||
-                    u.FirstName.Contains(listFilter, StringComparison.OrdinalIgnoreCase) || 
-                    u.LastName.Contains(listFilter, StringComparison.OrdinalIgnoreCase) ||
-                    u.Company.CompanyName.Contains(listFilter, StringComparison.OrdinalIgnoreCase) ||
-                    u.Company.CompanyCPhrase.Contains(listFilter, StringComparison.OrdinalIgnoreCase) ||
-                    u.Residence.Street.Contains(listFilter, StringComparison.OrdinalIgnoreCase) ||
-                    u.Residence.City.Contains(listFilter, StringComparison.OrdinalIgnoreCase) ||
-                    u.Residence.ZipCode.ToString().Contains(listFilter, StringComparison.OrdinalIgnoreCase)               
+                    u.Name.Contains(listFilter, StringComparison.OrdinalIgnoreCase) ||
+                    u.UserName.Contains(listFilter, StringComparison.OrdinalIgnoreCase) ||
+                    u.Company.Name.Contains(listFilter, StringComparison.OrdinalIgnoreCase) ||
+                    u.Company.CatchPhrase.Contains(listFilter, StringComparison.OrdinalIgnoreCase) ||
+                    u.Address.Street.Contains(listFilter, StringComparison.OrdinalIgnoreCase) ||
+                    u.Address.City.Contains(listFilter, StringComparison.OrdinalIgnoreCase) ||
+                    u.Address.ZipCode.ToString().Contains(listFilter, StringComparison.OrdinalIgnoreCase)
                 );
             }
-            if(limitList)
+            if (limitList)
             {
                 result = result?.Take(limitByAmount);
             }
-            return result; } 
+            return result;
+        }
     }
 
     protected override async Task OnInitializedAsync()
     {
-        await Task.Delay(2000);
-        userList = SortByFirstName(listOfUsers);       
+        await Task.Delay(500);
+        userList = SortByFirstName(users);
         showList = true;
     }
 
+    private async Task ListOption(ChangeEventArgs option)
+    {
+        string? select = option.Value?.ToString();
+        switch (select)
+        {
+            case "A":
+                userList = SortByFirstName(users);
+                showColumn = false;
+                break;
+
+            case "B":               
+                userList = await SortByID(usersAPI);
+                showColumn = true;
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    
+    private async Task<IQueryable<Person>> SortByID(IGetUsers listOfUsers)
+    {
+        var users = await listOfUsers.GetUsersAsync();
+        IQueryable<Person> id = users.OrderBy(u => u.Id).ThenBy(u => u.Name);
+
+        return id;
+    }
     private IQueryable<Person> SortByFirstName(IGetUsers listOfUsers)
     {
-        IQueryable<Person> firstName = listOfUsers.GetUsers().OrderBy(u => u.FirstName).ThenBy(u => u.Id);
+        IQueryable<Person> firstName = listOfUsers.GetUsersSync().OrderBy(u => u.Name).ThenBy(u => u.Id);
 
         return firstName;
     }
+
 
     private void ShowListAmount()
     {

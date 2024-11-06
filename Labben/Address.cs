@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Labben;
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Labben
 {
@@ -26,16 +28,7 @@ namespace Labben
         public string Suite { get { return _suite; } set { _suite = value; } }
 
         public Geo Geo { get; set; }
-
-        [JsonConstructor]
-        public Address(string street, string suite, string city, string zipCode, Geo geo)
-        {
-            Street = street;
-            Suite = suite;
-            City = city;
-            ZipCode = zipCode;
-            Geo = geo;
-        }
+        
         public Address(string street, string city, string zipCode)
         {
             Street = street;

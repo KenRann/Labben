@@ -4,32 +4,32 @@ namespace Labben
 {
     public class Company
     {
-        private string _companyName;
-        private string _companyCPhrase;
+        private string? _companyName;
+        private string? _catchPhrase;
+        private string? _bs;
 
         [Required]
-        [StringLength(50, MinimumLength =2)]
-        public string? CompanyName { get { return _companyName; } set { _companyName = value; } }
+        [StringLength(50, MinimumLength = 2)]
+        public string? Name { get { return _companyName; } set { _companyName = value; } }
 
-        //[Required]
-        //[StringLength(75, MinimumLength = 2)]
+        [Required]
+        [StringLength(75, MinimumLength = 2)]
         public string CatchPhrase { get { return _catchPhrase; } set { _catchPhrase = value; } }
 
-        //[JsonIgnore]
         public string Bs { get { return _bs; } set { _bs = value; } }
 
-        [JsonConstructor]
-        public Company(string compName, string compCPhrase, string bs)
+        //[JsonConstructor]
+        //public Company(string name, string catchPhrase, string bs)
+        //{
+        //    Name = name;
+        //    CatchPhrase = catchPhrase;
+        //    Bs = bs;
+        //}
+
+        public Company(string name, string catchPhrase)
         {
-            Name = compName;
-            CatchPhrase = compCPhrase;
-            Bs = bs;
-        }
-        
-        public Company(string compName, string compCPhrase)
-        {
-            CompanyName = compName;
-            CompanyCPhrase = compCPhrase;
+            Name = name;
+            CatchPhrase = catchPhrase;
         }
     }
 }

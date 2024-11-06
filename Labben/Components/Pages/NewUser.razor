@@ -1,21 +1,23 @@
 ﻿@page "/NewUser"
 @rendermode InteractiveServer
 
-<h3 style="font-size: 50px;">Welcome!</h3>
-<div>
-<p style="text-decoration: underline; font-size: 20px">Please give me all your details!</p>
-</div>
+
 
  @if (isShowing)
 {
+    <h3 style="font-size: 50px;">Welcome!</h3>
+    <div>
+        <p style="text-decoration: underline; font-size: 20px">Fill in the form: </p>
+    </div>
+
     <EditForm Model="person" OnValidSubmit="ValidSubmitHandling">        
         <ObjectGraphDataAnnotationsValidator />
         
         @*-- Personal --*@
         First name:
         <div>
-            <InputText id="FirstName" @bind-Value="person.FirstName" />
-            <ValidationMessage For="@(() => person.FirstName)" />
+            <InputText id="FirstName" @bind-Value="person.Name" />
+            <ValidationMessage For="@(() => person.Name)" />
         </div>  
         
         Last name:
@@ -33,33 +35,33 @@
         @*-- Company --*@
         Company: 
         <div>
-            <InputText id="CompanyName" @bind-Value="person.Company.CompanyName" />
-            <ValidationMessage For="@(() => person.Company.CompanyName)" />
+            <InputText id="CompanyName" @bind-Value="person.Company.Name" />
+            <ValidationMessage For="@(() => person.Company.Name)" />
         </div>
         
         Company catch phrase: 
         <div>
-            <InputText id="CompanyCPhrase" @bind-Value="person.Company.CompanyCPhrase" />
-            <ValidationMessage For="@(() => person.Company.CompanyCPhrase)" />
+            <InputText id="CompanyCPhrase" @bind-Value="person.Company.CatchPhrase" />
+            <ValidationMessage For="@(() => person.Company.CatchPhrase)" />
         </div> 
         
         @*-- Residence --*@
         Street: 
         <div>
-            <InputText id="Street" @bind-Value="person.Residence.Street" />
-            <ValidationMessage For="@(() => person.Residence.Street)" />
+            <InputText id="Street" @bind-Value="person.Address.Street" />
+            <ValidationMessage For="@(() => person.Address.Street)" />
         </div>
 
         City: 
         <div>
-            <InputText id="City" @bind-Value="person.Residence.City" />
-            <ValidationMessage For="@(() => person.Residence.City)" />
+            <InputText id="City" @bind-Value="person.Address.City" />
+            <ValidationMessage For="@(() => person.Address.City)" />
         </div>
 
         Zip code:
         <div>
-            <InputNumber id="ZipCode" @bind-Value="person.Residence.ZipCode" />
-            <ValidationMessage For="@(() => person.Residence.ZipCode)" />
+            <InputText id="ZipCode" @bind-Value="person.Address.ZipCode" />
+            <ValidationMessage For="@(() => person.Address.ZipCode)" />
         </div>
     
         <div style="margin-bottom: 10px; margin-top: 20px;">
@@ -72,29 +74,34 @@
 }
 else
 {
+    <h4 style="font-size: 50px;">Thank you!</h4>
+    
+    <div>
+        <p style="text-decoration: underline; font-size: 20px"> This is the submitted data: </p>
+    </div>
     @*-- Personal --*@
-    <p style="font-size: 16px; text-decoration: underline">Personal information</p>
+    <p style="font-size: 16px; text-decoration: underline; margin: 20px 40px 20px">Personal information</p>
     <p>Id: @person.Id</p>
-    <p>First name: @person.FirstName</p>
+    <p>First name: @person.Name</p>
     <p>Last name: @person.LastName</p>
     <p>E-Mail: @person.EMail</p>
 
     @*-- Company --*@
-    <p style="font-size: 16px; text-decoration: underline">Company information</p>  
-    <p>Company: @person.Company.CompanyName</p>
-    <p>Company catch phrase: @person.Company.CompanyCPhrase</p>
+    <p style="font-size: 16px; text-decoration: underline; margin: 20px 40px 20px">Company information</p>
+    <p>Company: @person.Company.Name</p>
+    <p>Company catch phrase: @person.Company.CatchPhrase</p>
 
     @*-- Residence --*@
-    <p style="font-size: 16px; text-decoration: underline">Residence information</p>
-    <p>Street: @person.Residence.Street</p>
-    <p>City: @person.Residence.City</p>
-    <p>Zip code: @person.Residence.ZipCode</p>
+    <p style="font-size: 16px; text-decoration: underline; margin: 20px 40px 20px">Residence information</p>
+    <p>Street: @person.Address.Street</p>
+    <p>City: @person.Address.City</p>
+    <p>Zip code: @person.Address.ZipCode</p>
 
-    <button @onclick="AddAnotherUser" >New</button>
+    <button @onclick="AddAnotherUser">New user</button>
 } 
 
 @code {
-    Person person = new Person(0, "", "", "", new Company("", ""), new Address("", "", 0)); 
+    Person person = new Person(0, "", "", "", new Company("", ""), new Address("", "", "")); 
 
     UserList listOfUsers = new UserList();
     bool isShowing = true;
@@ -105,14 +112,14 @@ else
         GenerateUserID();
         listOfUsers.AddUser(
             person.Id, 
-            person.FirstName, 
+            person.Name, 
             person.LastName, 
             person.EMail, 
-            person.Company.CompanyName,
-            person.Company.CompanyCPhrase, 
-            person.Residence.Street, 
-            person.Residence.City, 
-            person.Residence.ZipCode
+            person.Company.Name,
+            person.Company.CatchPhrase, 
+            person.Address.Street, 
+            person.Address.City, 
+            person.Address.ZipCode
         );
         isShowing = false;
     }
@@ -120,19 +127,19 @@ else
     private void AddAnotherUser()
     {
         isShowing = true;
-        person = new Person(0, "", "", "", new Company("", ""), new Address("", "", 0));
+        person = new Person(0, "", "", "", new Company("", ""), new Address("", "", ""));
     }
 
     private void QuickAddUser()
     {
-        person.FirstName = "Karl";
+        person.Name = "Karl";
         person.LastName = "Bengtsson";
         person.EMail = "karl.bengtsson@gmail.com";
-        person.Company.CompanyName = "Snett, vint och skevt AB";
-        person.Company.CompanyCPhrase = "Ring gärna, men inte oss.";
-        person.Residence.Street = "Nonya 1";
-        person.Residence.City = "Ingenmannsland";
-        person.Residence.ZipCode = 16545;
+        person.Company.Name = "Snett, vint och skevt AB";
+        person.Company.CatchPhrase = "Ring gärna, men inte oss.";
+        person.Address.Street = "Nonya 1";
+        person.Address.City = "Ingenmannsland";
+        person.Address.ZipCode = "16545";
     }
 
     private void GenerateUserID()

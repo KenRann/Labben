@@ -9,15 +9,15 @@ namespace Labben
         string? _name;
         string? _lName;
         string? _email;
-        string _userName;
-        string _phone;
-        string _website;
+        string? _userName;
+        string? _phone;
+        string? _website;
 
         public int Id { get { return _id; } set { _id = value; } }
 
         [Required]
         [StringLength(50, MinimumLength = 2)]
-        public string FirstName { get { return _fName; } set { _fName = value; } }
+        public string Name { get { return _name; } set { _name = value; } }
         [Required]
         [StringLength(50, MinimumLength = 2)]
         public string LastName { get { return _lName; } set { _lName = value; } }
@@ -25,15 +25,21 @@ namespace Labben
         [EmailAddress]
         public string EMail { get { return _email; } set { _email = value; } }
 
+        public string UserName { get { return _userName; } set { _userName = value; } }
+        public string Phone { get { return _phone; } set { _phone = value; } }
+        public string Website { get { return _website; } set { _website = value; } }
+
         [ValidateComplexType]
         public Company Company { get; set; }
 
         [ValidateComplexType]
-        public Address Residence { get; set; }
+        public Address Address { get; set; }
 
         public Person()
-        {           
+        {
         }
+
+        //[JsonConstructor]
         //public Person(int id, string name, string username, string eMail, Address address, string phone, string website, Company company)
         //{
         //    Id = id;
@@ -44,16 +50,16 @@ namespace Labben
         //    Phone = phone;
         //    Website = website;
         //    Company = company;
-        //    Address = address;
+
         //}
-        public Person(int id, string name, string email, Company company, Address residence) 
+        public Person(int id, string fName, string lName, string email, Company company, Address address)
         {
             Id = id;
-            _fName = fName;
-            _lName = lName;
+            Name = fName;
+            LastName = lName;
             _email = email;
             Company = company;
-            Residence = residence;
+            Address = address;
         }
     }
 }
