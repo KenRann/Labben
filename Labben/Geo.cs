@@ -19,7 +19,6 @@ namespace Labben
             Lng = lng;
         }
         public Geo()
-        {
-        }
+        {}
     }
 }

@@ -1,6 +1,6 @@
 ﻿@page "/Users"
 @rendermode @(new InteractiveServerRenderMode(false))
-  @* @rendermode InteractiveServer   *@
+@* @rendermode InteractiveServer *@
 @*Can't use rendermode. It made the page load twice*@
 @attribute [StreamRendering]
 @using Microsoft.AspNetCore.Components.QuickGrid;
@@ -22,13 +22,14 @@ else
 {
       <QuickGrid Items="@FilterUser" >     
         <PropertyColumn Property="@(u => u.Id)" Sortable="true" />
-        <PropertyColumn Property="@(u => u.Name)" Sortable="true"  />
+        <PropertyColumn Property="@(u => u.FirstName)" Sortable="true"  />
+        <PropertyColumn Property="@(u => u.LastName)" Sortable="true" />
         <PropertyColumn Property="@(u => u.EMail)" Sortable="true" />
-        <PropertyColumn Property="@(u => u.Company.Name)" Sortable="true" />
-        <PropertyColumn Property="@(u => u.Company.CatchPhrase)" Sortable="true" />
-        <PropertyColumn Property="@(u => u.Address.Street)" Sortable="true" />
-        <PropertyColumn Property="@(u => u.Address.City)" Sortable="true" />
-        <PropertyColumn Property="@(u => u.Address.ZipCode)" Sortable="true" />
+        <PropertyColumn Property="@(u => u.Company.CompanyName)" Sortable="true" />
+        <PropertyColumn Property="@(u => u.Company.CompanyCPhrase)" Sortable="true" />
+        <PropertyColumn Property="@(u => u.Residence.Street)" Sortable="true" />
+        <PropertyColumn Property="@(u => u.Residence.City)" Sortable="true" />
+        <PropertyColumn Property="@(u => u.Residence.ZipCode)" Sortable="true" />
     </QuickGrid>
     <div class="search-box">
         <input type="search" @bind="listFilter" @bind:event="oninput" placeholder="Search..." />
@@ -39,9 +40,8 @@ else
 
 @code {
     UserList listOfUsers = new UserList();
-    APIDataAccess apiUsers = new APIDataAccess();
     IQueryable<Person>? userList;
-
+    
 
     int limitByAmount = 5;
     string? listFilter;
@@ -56,12 +56,13 @@ else
             {
                 result = result?.Where(u =>
                     u.Id.ToString().Contains(listFilter, StringComparison.OrdinalIgnoreCase) ||
-                    u.Name.Contains(listFilter, StringComparison.OrdinalIgnoreCase) || 
-                    u.Company.Name.Contains(listFilter, StringComparison.OrdinalIgnoreCase) ||
-                    u.Company.CatchPhrase.Contains(listFilter, StringComparison.OrdinalIgnoreCase) ||
-                    u.Address.Street.Contains(listFilter, StringComparison.OrdinalIgnoreCase) ||
-                    u.Address.City.Contains(listFilter, StringComparison.OrdinalIgnoreCase) ||
-                    u.Address.ZipCode.ToString().Contains(listFilter, StringComparison.OrdinalIgnoreCase)               
+                    u.FirstName.Contains(listFilter, StringComparison.OrdinalIgnoreCase) || 
+                    u.LastName.Contains(listFilter, StringComparison.OrdinalIgnoreCase) ||
+                    u.Company.CompanyName.Contains(listFilter, StringComparison.OrdinalIgnoreCase) ||
+                    u.Company.CompanyCPhrase.Contains(listFilter, StringComparison.OrdinalIgnoreCase) ||
+                    u.Residence.Street.Contains(listFilter, StringComparison.OrdinalIgnoreCase) ||
+                    u.Residence.City.Contains(listFilter, StringComparison.OrdinalIgnoreCase) ||
+                    u.Residence.ZipCode.ToString().Contains(listFilter, StringComparison.OrdinalIgnoreCase)               
                 );
             }
             if(limitList)
@@ -73,16 +74,14 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        await Task.Delay(500);
-        // userList = apiUsers.GetUsers();
-        // userList = SortByFirstName(listOfUsers);       
-        userList = await apiUsers.GetUsersAsync();       
+        await Task.Delay(2000);
+        userList = SortByFirstName(listOfUsers);       
         showList = true;
     }
 
     private IQueryable<Person> SortByFirstName(IGetUsers listOfUsers)
     {
-        IQueryable<Person> firstName = listOfUsers.GetUsersSync().OrderBy(u => u.Name).ThenBy(u => u.Id);
+        IQueryable<Person> firstName = listOfUsers.GetUsers().OrderBy(u => u.FirstName).ThenBy(u => u.Id);
 
         return firstName;
     }

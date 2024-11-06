@@ -1,17 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 
 namespace Labben
 {
     public class Company
     {
-        private string? _name;
-        private string? _catchPhrase;
-        private string? _bs;
+        private string _companyName;
+        private string _companyCPhrase;
 
         [Required]
         [StringLength(50, MinimumLength =2)]
-        public string Name { get { return _name; } set { _name = value; } }
+        public string? CompanyName { get { return _companyName; } set { _companyName = value; } }
 
         //[Required]
         //[StringLength(75, MinimumLength = 2)]
@@ -30,8 +28,8 @@ namespace Labben
         
         public Company(string compName, string compCPhrase)
         {
-            Name = compName;
-            CatchPhrase = compCPhrase;           
+            CompanyName = compName;
+            CompanyCPhrase = compCPhrase;
         }
     }
 }

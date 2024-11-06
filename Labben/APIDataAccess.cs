@@ -3,7 +3,7 @@ using static System.Net.WebRequestMethods;
 
 namespace Labben
 {
-    public class APIDataAccess : IGetUsers
+    public class APIDataAccess
     {
         private readonly string _source;
         string? response;       
@@ -14,21 +14,18 @@ namespace Labben
 
         }
 
-        public async Task<string> GetDataAsync()
+        public async Task GetDataAsync()
         {
             try
             {
                 using HttpClient client = new HttpClient();
 
-                var retrievedData = await client.GetStringAsync("https://jsonplaceholder.typicode.com/users");
+                Task<string> getData = client.GetStringAsync(_source);
 
-                return retrievedData;
-
-        }
+                response = await getData;
+            }
             catch (InvalidOperationException)
-            {
-                Console.WriteLine("1");
-                throw; }
+            { throw; }
             catch (HttpRequestException)
             {
                 Console.WriteLine("2");
@@ -57,25 +54,11 @@ namespace Labben
             //return JsonSerializer.Deserialize<List<Person>>(apiJsonData, options);
         }
 
-        public async Task<IQueryable<Person>> GetUsersAsync()
-        {
-            //IQueryable<Person> userData = JsonSerializer.Deserialize<IQueryable<Person>>(response, options);
-            //return userData;
-            try
-            {
-                var json = await GetDataAsync();
-                var users = DeserializeAPIData(json);
-                return users.AsQueryable();
-            }
-            catch {
-                Console.WriteLine("hej"); 
-                throw; }
-            //return DeserializeAPIData(GetDataAsync().Result).AsQueryable(); 
         }
 
-        public IQueryable<Person> GetUsersSync()
+        public void ReadData()
         { 
-            throw new NotImplementedException();
+            Person userData = JsonSerializer.Deserialize<Person>(response);
         }
 
         //public IQueryable<Person> GetUsers()
