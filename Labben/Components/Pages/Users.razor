@@ -1,16 +1,11 @@
 ﻿@page "/Users"
 @rendermode @(new InteractiveServerRenderMode(false))
-@* @rendermode InteractiveServer *@
 @attribute [StreamRendering]
 @using Microsoft.AspNetCore.Components.QuickGrid;
 
-
-
 <PageTitle>Users</PageTitle>
 
-
-
-@if (showList != true)          @*Gotta do it like this since the list is being loaded to fast*@
+@if (_showList != true)     
 {
     <p class="text-center" style="font-size: 20px; margin: 150px 40px 30px 50px"><em>Loading users...</em></p>
     <p class="text-center">
@@ -35,15 +30,14 @@ else
             <option value="A">A</option>
             <option value="B">API</option>
         </select>
-        <button @onclick="@ShowListAmount">@buttonText</button>
-        <input type="search" @bind="listFilter" @bind:event="oninput" placeholder="Search..." />
+        <button @onclick="@ShowListAmount">@_buttonText</button>
+        <input type="search" @bind="_listFilter" @bind:event="oninput" placeholder="Search..." />
     </div>
 
     <QuickGrid Items="@FilterUser">
-
         <PropertyColumn Property="@(u => u.Id)" Sortable="true" />
         <PropertyColumn Property="@(u => u.Name)" Sortable="true" />
-        @if (showColumn)
+        @if (_showColumn)
         {
         <PropertyColumn Property="@(u => u.UserName)" Sortable="true" Title="Username" />
         }
@@ -60,34 +54,34 @@ else
     UserList users = new UserList();
     APIDataAccess usersAPI = new APIDataAccess();
     IQueryable<Person>? userList;
-    bool showList = false;
-    int limitByAmount = 5;
-    string? listFilter; 
-    bool showColumn = false;
-    bool limitList = true;
-    string buttonText => limitList ? "Show all" : "Show less";
+    bool _showList = false;
+    int _limitByAmount = 5;
+    string? _listFilter; 
+    bool _showColumn = false;
+    bool _limitList = true;
+    string _buttonText => _limitList ? "Show all" : "Show less";
 
     IQueryable<Person> FilterUser
     {
         get
         {
             var result = userList;
-            if (!string.IsNullOrEmpty(listFilter))
+            if (!string.IsNullOrEmpty(_listFilter))
             {
                 result = result?.Where(u =>
-                    u.Id.ToString().Contains(listFilter, StringComparison.OrdinalIgnoreCase) ||
-                    u.Name.Contains(listFilter, StringComparison.OrdinalIgnoreCase) ||
-                    u.UserName.Contains(listFilter, StringComparison.OrdinalIgnoreCase) ||
-                    u.Company.Name.Contains(listFilter, StringComparison.OrdinalIgnoreCase) ||
-                    u.Company.CatchPhrase.Contains(listFilter, StringComparison.OrdinalIgnoreCase) ||
-                    u.Address.Street.Contains(listFilter, StringComparison.OrdinalIgnoreCase) ||
-                    u.Address.City.Contains(listFilter, StringComparison.OrdinalIgnoreCase) ||
-                    u.Address.ZipCode.ToString().Contains(listFilter, StringComparison.OrdinalIgnoreCase)
+                    u.Id.ToString().Contains(_listFilter, StringComparison.OrdinalIgnoreCase) ||
+                    u.Name.Contains(_listFilter, StringComparison.OrdinalIgnoreCase) ||
+                    u.UserName.Contains(_listFilter, StringComparison.OrdinalIgnoreCase) ||
+                    u.Company.Name.Contains(_listFilter, StringComparison.OrdinalIgnoreCase) ||
+                    u.Company.CatchPhrase.Contains(_listFilter, StringComparison.OrdinalIgnoreCase) ||
+                    u.Address.Street.Contains(_listFilter, StringComparison.OrdinalIgnoreCase) ||
+                    u.Address.City.Contains(_listFilter, StringComparison.OrdinalIgnoreCase) ||
+                    u.Address.ZipCode.ToString().Contains(_listFilter, StringComparison.OrdinalIgnoreCase)
                 );
             }
-            if (limitList)
+            if (_limitList)
             {
-                result = result?.Take(limitByAmount);
+                result = result?.Take(_limitByAmount);
             }
             return result;
         }
@@ -96,8 +90,8 @@ else
     protected override async Task OnInitializedAsync()
     {
         await Task.Delay(2000);
-        userList = SortByFirstName(users);
-        showList = true;
+        userList = SortBy(users);
+        _showList = true;
     }
 
     private async Task ListOption(ChangeEventArgs option)
@@ -106,13 +100,13 @@ else
         switch (select)
         {
             case "A":
-                userList = SortByFirstName(users);
-                showColumn = false;
+                userList = SortBy(users);
+                _showColumn = false;
                 break;
 
             case "B":               
-                userList = await SortByIDAsync(usersAPI);
-                showColumn = true;
+                userList = await SortByAsync(usersAPI);
+                _showColumn = true;
                 break;
 
             default:
@@ -120,15 +114,14 @@ else
         }
     }
    
-    private async Task<IQueryable<Person>> SortByIDAsync(IGetUsers listOfUsers)
+    private async Task<IQueryable<Person>> SortByAsync(IGetUsers listOfUsers)
     {
         var users = await listOfUsers.GetUsersAsync();
         IQueryable<Person> id = users.OrderBy(u => u.Id).ThenBy(u => u.Name);
-
         return id;
     }
 
-    private IQueryable<Person> SortByFirstName(IGetUsers listOfUsers)
+    private IQueryable<Person> SortBy(IGetUsers listOfUsers)
     {
         IQueryable<Person> firstName = listOfUsers.GetUsers().OrderBy(u => u.Name).ThenBy(u => u.Id);
 
@@ -137,7 +130,7 @@ else
 
     private void ShowListAmount()
     {
-        limitList = !limitList;
+        _limitList = !_limitList;
     }
 }
 

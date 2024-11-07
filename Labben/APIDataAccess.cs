@@ -7,6 +7,8 @@ namespace Labben
     public class APIDataAccess : IGetUsers
     {
         private readonly string _dataSource = "https://jsonplaceholder.typicode.com/users";
+        private JsonSerializerOptions _options = new JsonSerializerOptions
+        { PropertyNameCaseInsensitive = true };
 
         public APIDataAccess()
         { }
@@ -33,17 +35,11 @@ namespace Labben
         {
             try
             {
-                JsonSerializerOptions options = new JsonSerializerOptions
-                { PropertyNameCaseInsensitive = true };
-
-                var deserializedData = JsonSerializer.Deserialize<List<Person>>(apiJsonData, options);
+                var deserializedData = JsonSerializer.Deserialize<List<Person>>(apiJsonData, _options);
                 return deserializedData;
             }
             catch (JsonException ex)
-            {
-                Console.WriteLine($"Deserialization error: {ex.Message}");
-                throw;
-            }
+            { throw; }
         }
 
         public async Task<IQueryable<Person>> GetUsersAsync()
@@ -55,9 +51,7 @@ namespace Labben
                 return users.AsQueryable();
             }
             catch
-            {
-                throw;
-            }
+            { throw; }
         }
 
         public IQueryable<Person> GetUsers()

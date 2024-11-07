@@ -7,10 +7,8 @@ namespace Labben
     public class Address
     {
         private string? _street;
-        private string? _suite;
         private string? _city;
-        private string? _zipCode;
-        
+        private string? _zipCode;      
 
         [Required]
         [StringLength (50, MinimumLength = 2)]        
