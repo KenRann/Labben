@@ -1,8 +1,6 @@
 ﻿@page "/NewUser"
 @rendermode InteractiveServer
 
-
-
  @if (isShowing)
 {
     <h3 style="font-size: 50px;">Welcome!</h3>
@@ -65,8 +63,7 @@
         </div>
     
         <div style="margin-bottom: 10px; margin-top: 20px;">
-            <button type="Submit" >Save</button>
-            
+            <button type="Submit" >Save</button>           
         </div>
 
     </EditForm>
@@ -101,7 +98,7 @@ else
 } 
 
 @code {
-    Person person = new Person(0, "", "", "", new Company("", ""), new Address("", "", "")); 
+    Person person = new Person(0, "", "", new Company("", ""), new Address("", "", "")); 
 
     UserList listOfUsers = new UserList();
     bool isShowing = true;
@@ -127,7 +124,7 @@ else
     private void AddAnotherUser()
     {
         isShowing = true;
-        person = new Person(0, "", "", "", new Company("", ""), new Address("", "", ""));
+        person = new Person(0, "", "", new Company("", ""), new Address("", "", ""));
     }
 
     private void QuickAddUser()

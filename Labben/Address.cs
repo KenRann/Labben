@@ -21,13 +21,8 @@ namespace Labben
         public string City { get { return _city; } set { _city = value; } }
 
         [Required]
-        //[Range(1000,99999)]
+        [Range(1000, 99999)]
         public string ZipCode { get { return _zipCode; } set { _zipCode = value; } }
-
-        [JsonIgnore]
-        public string Suite { get { return _suite; } set { _suite = value; } }
-
-        public Geo Geo { get; set; }
         
         public Address(string street, string city, string zipCode)
         {

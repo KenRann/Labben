@@ -2,7 +2,7 @@
 {
     public interface IGetUsers
     {
-        IQueryable<Person> GetUsersSync();
+        IQueryable<Person> GetUsers();
 
         Task <IQueryable<Person>> GetUsersAsync();
     }

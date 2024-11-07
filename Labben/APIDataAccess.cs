@@ -60,7 +60,7 @@ namespace Labben
             }
         }
 
-        public IQueryable<Person> GetUsersSync()
+        public IQueryable<Person> GetUsers()
         {
             throw new NotImplementedException();
         }

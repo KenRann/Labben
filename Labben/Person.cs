@@ -26,37 +26,22 @@ namespace Labben
         public string EMail { get { return _email; } set { _email = value; } }
 
         public string UserName { get { return _userName; } set { _userName = value; } }
-        public string Phone { get { return _phone; } set { _phone = value; } }
-        public string Website { get { return _website; } set { _website = value; } }
 
+        [Required]
         [ValidateComplexType]
         public Company Company { get; set; }
 
+        [Required]
         [ValidateComplexType]
         public Address Address { get; set; }
 
         public Person()
         {
         }
-
-        //[JsonConstructor]
-        //public Person(int id, string name, string username, string eMail, Address address, string phone, string website, Company company)
-        //{
-        //    Id = id;
-        //    Name = name;
-        //    UserName = username;
-        //    EMail = eMail;
-        //    Address = address;
-        //    Phone = phone;
-        //    Website = website;
-        //    Company = company;
-
-        //}
-        public Person(int id, string fName, string lName, string email, Company company, Address address)
+        public Person(int id, string name,  string email, Company company, Address address)
         {
             Id = id;
-            Name = fName;
-            LastName = lName;
+            Name = name;
             _email = email;
             Company = company;
             Address = address;
