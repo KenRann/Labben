@@ -71,7 +71,7 @@ else
                 result = result?.Where(u =>
                     u.Id.ToString().Contains(_listFilter, StringComparison.OrdinalIgnoreCase) ||
                     u.Name.Contains(_listFilter, StringComparison.OrdinalIgnoreCase) ||
-                    u.UserName.Contains(_listFilter, StringComparison.OrdinalIgnoreCase) ||
+                    (_showColumn && u.UserName.Contains(_listFilter, StringComparison.OrdinalIgnoreCase)) ||
                     u.Company.Name.Contains(_listFilter, StringComparison.OrdinalIgnoreCase) ||
                     u.Company.CatchPhrase.Contains(_listFilter, StringComparison.OrdinalIgnoreCase) ||
                     u.Address.Street.Contains(_listFilter, StringComparison.OrdinalIgnoreCase) ||
